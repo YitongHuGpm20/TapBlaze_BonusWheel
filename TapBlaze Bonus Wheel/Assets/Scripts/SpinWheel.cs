@@ -73,12 +73,12 @@ public class SpinWheel : MonoBehaviour
 
         finalAngle = Mathf.RoundToInt(transform.eulerAngles.z);
         int sectorNum = finalAngle / 45 + 1;
-        winText.text = "You win " + sectorNum.ToString();
+        winText.text = "You win Prize #" + sectorNum.ToString();
 
         coroutineAllowed = true;
     }
 
-    public void PressButton()
+    public void PressSpinButton()
     {
         if(coroutineAllowed)
             StartCoroutine(Spin());
