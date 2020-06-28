@@ -10,13 +10,17 @@ public class SpinWheel : MonoBehaviour
     {
         public string Type;
         public int Amount;
-        public int Chance;
+        public int DropRate;
+        public int DropRateMin;
+        public int DropRateMax;
 
-        public Sector(string type, int amount, int chance)
+        public Sector(string type, int amount, int dropRate, int min, int max)
         {
             Type = type;
             Amount = amount;
-            Chance = chance;
+            DropRate = dropRate;
+            DropRateMin = min;
+            DropRateMax = max;
         }
     }
 
@@ -32,30 +36,27 @@ public class SpinWheel : MonoBehaviour
         }
     }
 
-    Sector[] sectors = new Sector[8];
-    Item[] items = new Item[5];
-
-    int randomValue;
-    float timeInterval;
-    bool coroutineAllowed;
-    int finalAngle;
+    private Sector[] sectors = new Sector[8];
+    private Item[] items = new Item[5];
+    private bool canSpin;
+    private int finalAngle;
 
     public TextMeshProUGUI winText;
     public TextMeshProUGUI[] itemAmount;
 
     //string[] prizeTypes = new string[] { "Life", "Brush", "Gem", "Hammer", "Coin" };
 
-    void Awake()
+    private void Awake()
     {
         //Default wheel sections
-        sectors[0] = new Sector("Life", 30, 20);
-        sectors[1] = new Sector("Brush", 3, 10);
-        sectors[2] = new Sector("Gem", 35, 10);
-        sectors[3] = new Sector("Hammer", 3, 10);
-        sectors[4] = new Sector("Coin", 750, 5);
-        sectors[5] = new Sector("Brush", 1, 20);
-        sectors[6] = new Sector("Gem", 75, 5);
-        sectors[7] = new Sector("Hammer", 1, 20);
+        sectors[0] = new Sector("Life", 30, 20, 0, 0);
+        sectors[1] = new Sector("Brush", 3, 10, 0, 0);
+        sectors[2] = new Sector("Gem", 35, 10, 0, 0);
+        sectors[3] = new Sector("Hammer", 3, 10, 0, 0);
+        sectors[4] = new Sector("Coin", 750, 5, 0, 0);
+        sectors[5] = new Sector("Brush", 1, 20, 0, 0);
+        sectors[6] = new Sector("Gem", 75, 5, 0, 0);
+        sectors[7] = new Sector("Hammer", 1, 20, 0, 0);
 
         //Default item status
         items[0] = new Item("Life", 0);
@@ -64,30 +65,40 @@ public class SpinWheel : MonoBehaviour
         items[3] = new Item("Hammer", 0);
         items[4] = new Item("Coin", 0);
 
+        canSpin = true;
+    }
+
+    private void Start()
+    {
+        //Update items status UI
         for (int i = 0; i < 5; i++)
             itemAmount[i].text = items[i].Amount.ToString();
 
-        coroutineAllowed = true;
+        UpdateDropRates();
     }
 
-    void Update()
+    private IEnumerator Spin()
     {
+        canSpin = false;
+        float timeInterval = 0.1f;
+        int spinResult = Random.Range(0, 100);
+        int rotateTimes = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            if (spinResult >= sectors[i].DropRateMin && spinResult <= sectors[i].DropRateMax)
+            {
+                rotateTimes = i + 23;
+                Debug.Log((i+1).ToString() + " " + spinResult);
+            } 
+        }
 
-    }
-
-    IEnumerator Spin()
-    {
-        coroutineAllowed = false;
-        randomValue = Random.Range(20, 30);
-        timeInterval = 0.1f;
-
-        //Slow down the wheel
-        for (int i = 0; i < randomValue; i++) 
+        //Slow down the wheel BUGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+        for (int i = 0; i < rotateTimes; i++) 
         {
             transform.Rotate(0, 0, 22.5f);
-            if (i > Mathf.RoundToInt(randomValue * .5f))
+            if (i > Mathf.RoundToInt(rotateTimes * .5f))
                 timeInterval = .2f;
-            if (i > Mathf.RoundToInt(randomValue * .85f))
+            if (i > Mathf.RoundToInt(rotateTimes * .85f))
                 timeInterval = .4f;
             yield return new WaitForSeconds(timeInterval);
         }
@@ -98,31 +109,44 @@ public class SpinWheel : MonoBehaviour
 
         //Update result
         finalAngle = Mathf.RoundToInt(transform.eulerAngles.z);
-        int sectorNum = finalAngle / 45 + 1;
-        winText.text = "You win Prize #" + sectorNum.ToString();
+        int sectorIndex = finalAngle / 45 + 1;
+        winText.text = "You win Prize #" + sectorIndex.ToString();
         for(int i = 0; i < 5; i++)
         {
-            if(items[i].Type == sectors[sectorNum - 1].Type)
+            if(items[i].Type == sectors[sectorIndex - 1].Type)
             {
-                items[i].Amount += sectors[sectorNum - 1].Amount;
+                items[i].Amount += sectors[sectorIndex - 1].Amount;
                 itemAmount[i].text = items[i].Amount.ToString();
             }
         }
 
-        coroutineAllowed = true;
+        canSpin = true;
+    }
+
+    private void UpdateDropRates()
+    {
+        sectors[0].DropRateMin = 0;
+        sectors[0].DropRateMax = sectors[0].DropRate - 1;
+        for (int i = 1; i < 8; i++)
+        {
+            sectors[i].DropRateMin = sectors[i - 1].DropRateMax + 1;
+            sectors[i].DropRateMax = sectors[i].DropRateMin + sectors[i].DropRate - 1;
+        }
+        for (int i = 0; i < 8; i++)
+            Debug.Log("#" + (i+1).ToString() + ": " + sectors[i].DropRateMin.ToString() + " - " + sectors[i].DropRateMax.ToString());
     }
 
     public void PressSpinButton()
     {
-        if(coroutineAllowed)
+        if(canSpin)
             StartCoroutine(Spin());
     }
 
-    bool areDropChancesGood()
+    private bool areDropRatesGood()
     {
         int sum = 0;
         for(int i = 0; i < 8; i++)
-            sum += sectors[i].Chance;
+            sum += sectors[i].DropRate;
         return sum == 100;
     }//Check if the total of every sector's drop chance is 100%
 }
