@@ -40,6 +40,8 @@ public class SpinWheel : MonoBehaviour
     private Item[] items = new Item[5];
     private bool canSpin;
     private int finalAngle;
+    private int pointedSector;
+    private int[] testSectors = new int[8];
 
     public TextMeshProUGUI winText;
     public TextMeshProUGUI[] itemAmount;
@@ -66,6 +68,7 @@ public class SpinWheel : MonoBehaviour
         items[4] = new Item("Coin", 0);
 
         canSpin = true;
+        pointedSector = 0;
     }
 
     private void Start()
@@ -75,6 +78,12 @@ public class SpinWheel : MonoBehaviour
             itemAmount[i].text = items[i].Amount.ToString();
 
         UpdateDropRates();
+        //TestSectorsDropRates();
+    }
+
+    private void Update()
+    {
+        
     }
 
     private IEnumerator Spin()
@@ -87,10 +96,12 @@ public class SpinWheel : MonoBehaviour
         {
             if (spinResult >= sectors[i].DropRateMin && spinResult <= sectors[i].DropRateMax)
             {
-                rotateTimes = i + 23;
-                Debug.Log((i+1).ToString() + " " + spinResult);
+                rotateTimes = (i + 24 - pointedSector) * 2;
+                Debug.Log((i+1).ToString() + " " + spinResult + " " + rotateTimes / 2);
             } 
         }
+
+        //Todo: get the pointed sector's index when spin starts
 
         //Slow down the wheel BUGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
         for (int i = 0; i < rotateTimes; i++) 
@@ -109,13 +120,13 @@ public class SpinWheel : MonoBehaviour
 
         //Update result
         finalAngle = Mathf.RoundToInt(transform.eulerAngles.z);
-        int sectorIndex = finalAngle / 45 + 1;
-        winText.text = "You win Prize #" + sectorIndex.ToString();
+        pointedSector = finalAngle / 45;
+        winText.text = "You win Prize #" + (pointedSector + 1).ToString();
         for(int i = 0; i < 5; i++)
         {
-            if(items[i].Type == sectors[sectorIndex - 1].Type)
+            if(items[i].Type == sectors[pointedSector].Type)
             {
-                items[i].Amount += sectors[sectorIndex - 1].Amount;
+                items[i].Amount += sectors[pointedSector].Amount;
                 itemAmount[i].text = items[i].Amount.ToString();
             }
         }
@@ -136,10 +147,29 @@ public class SpinWheel : MonoBehaviour
             Debug.Log("#" + (i+1).ToString() + ": " + sectors[i].DropRateMin.ToString() + " - " + sectors[i].DropRateMax.ToString());
     }
 
+    //Button Functions------------------------------------------------------------------------------------
     public void PressSpinButton()
     {
         if(canSpin)
             StartCoroutine(Spin());
+    }
+
+    //Unit Testing----------------------------------------------------------------------------------------
+    private void TestSectorsDropRates()
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            int r = Random.Range(0, 100);
+            for (int j = 0; j < 8; j++)
+            {
+                if (r >= sectors[j].DropRateMin && r <= sectors[j].DropRateMax)
+                {
+                    testSectors[j]++;
+                }
+            }
+        }
+        for (int k = 0; k < 8; k++)
+            Debug.Log((k+1).ToString() + ": " + testSectors[k]/10 + "%");
     }
 
     private bool areDropRatesGood()
