@@ -89,7 +89,7 @@ public class SpinWheel : MonoBehaviour
     private IEnumerator Spin()
     {
         canSpin = false;
-        float timeInterval = 0.1f;
+        float timeInterval = 0.05f;
         int spinResult = Random.Range(0, 100);
         int rotateTimes = 0;
         for (int i = 0; i < 8; i++)
@@ -97,20 +97,18 @@ public class SpinWheel : MonoBehaviour
             if (spinResult >= sectors[i].DropRateMin && spinResult <= sectors[i].DropRateMax)
             {
                 rotateTimes = (i + 24 - pointedSector) * 2;
-                Debug.Log((i+1).ToString() + " " + spinResult + " " + rotateTimes / 2);
+                //Debug.Log((i+1).ToString() + " " + spinResult + " " + rotateTimes / 2);
             } 
         }
 
-        //Todo: get the pointed sector's index when spin starts
-
-        //Slow down the wheel BUGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+        //Slow down the wheel
         for (int i = 0; i < rotateTimes; i++) 
         {
             transform.Rotate(0, 0, 22.5f);
             if (i > Mathf.RoundToInt(rotateTimes * .5f))
-                timeInterval = .2f;
+                timeInterval = .1f;
             if (i > Mathf.RoundToInt(rotateTimes * .85f))
-                timeInterval = .4f;
+                timeInterval = .2f;
             yield return new WaitForSeconds(timeInterval);
         }
 
@@ -143,8 +141,8 @@ public class SpinWheel : MonoBehaviour
             sectors[i].DropRateMin = sectors[i - 1].DropRateMax + 1;
             sectors[i].DropRateMax = sectors[i].DropRateMin + sectors[i].DropRate - 1;
         }
-        for (int i = 0; i < 8; i++)
-            Debug.Log("#" + (i+1).ToString() + ": " + sectors[i].DropRateMin.ToString() + " - " + sectors[i].DropRateMax.ToString());
+        //for (int i = 0; i < 8; i++)
+            //Debug.Log("#" + (i+1).ToString() + ": " + sectors[i].DropRateMin.ToString() + " - " + sectors[i].DropRateMax.ToString());
     }
 
     //Button Functions------------------------------------------------------------------------------------
