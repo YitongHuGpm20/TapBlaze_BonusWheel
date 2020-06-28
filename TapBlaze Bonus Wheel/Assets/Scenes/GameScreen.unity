@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 132878512}
   - component: {fileID: 132878511}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Lives
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2771,7 +2771,7 @@ GameObject:
   - component: {fileID: 1088523779}
   - component: {fileID: 1088523778}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Coins
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3082,7 +3082,7 @@ GameObject:
   - component: {fileID: 1159663568}
   - component: {fileID: 1159663567}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Hammers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3238,7 +3238,7 @@ GameObject:
   - component: {fileID: 1249896409}
   - component: {fileID: 1249896408}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Brushes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3713,7 +3713,7 @@ GameObject:
   - component: {fileID: 1389463376}
   - component: {fileID: 1389463375}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Gems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5729,6 +5729,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winText: {fileID: 1619926268}
+  itemAmount:
+  - {fileID: 132878511}
+  - {fileID: 1249896408}
+  - {fileID: 1389463375}
+  - {fileID: 1159663567}
+  - {fileID: 1088523778}
 --- !u!1 &1752867759
 GameObject:
   m_ObjectHideFlags: 0
