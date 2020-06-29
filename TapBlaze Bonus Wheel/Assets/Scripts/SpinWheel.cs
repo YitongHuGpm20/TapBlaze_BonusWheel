@@ -53,6 +53,7 @@ public class SpinWheel : MonoBehaviour
     public GameObject win;
     public GameObject autoSpinOptions;
     public TextMeshProUGUI autoSpinButtonText;
+    public GameObject flame;
     private Sector[] sectors = new Sector[8];
     private Item[] items = new Item[5];
     private bool canSpin;
@@ -130,20 +131,33 @@ public class SpinWheel : MonoBehaviour
             } 
         }
 
-        //Spin the wheel and control spinning speed
-        for (int i = 0; i < rotateTimes; i++) 
+        if (autoSpinTime == 1)
         {
-            transform.Rotate(0, 0, 22.5f);
-            if (i > Mathf.RoundToInt(rotateTimes * .5f))
-                timeInterval = .1f;
-            if (i > Mathf.RoundToInt(rotateTimes * .85f))
-                timeInterval = .2f;
-            yield return new WaitForSeconds(timeInterval);
-        }
+            //Spin the wheel and control spinning speed
+            for (int i = 0; i < rotateTimes; i++)
+            {
+                transform.Rotate(0, 0, 22.5f);
+                if (i > Mathf.RoundToInt(rotateTimes * .5f))
+                    timeInterval = .1f;
+                if (i > Mathf.RoundToInt(rotateTimes * .85f))
+                    timeInterval = .2f;
+                yield return new WaitForSeconds(timeInterval);
+            }
 
-        //When wheel stops
-        if (Mathf.RoundToInt(transform.eulerAngles.z) % 45 != 0)
-            transform.Rotate(0, 0, 22.5f);
+            //When wheel stops
+            if (Mathf.RoundToInt(transform.eulerAngles.z) % 45 != 0)
+                transform.Rotate(0, 0, 22.5f);
+        }
+        else
+        {
+            flame.SetActive(true);
+            for (int i = 0; i < 150; i++)
+            {
+                transform.Rotate(0, 0, 45f);
+                yield return new WaitForSeconds(.01f);
+            }
+            flame.SetActive(false);
+        }
 
         //Find the index of current pointed sector
         finalAngle = Mathf.RoundToInt(transform.eulerAngles.z);
