@@ -40,6 +40,13 @@ public class SpinWheel : MonoBehaviour
         }
     }
 
+    [Header("Unit Testing - Turn ON to run UT functions when press play in editor")]
+    public bool UnitTestingOn; //Set true to run unit testing functions when press play in editor
+    public string[] ut_prizeType = new string[8];
+    public int[] ut_amount = new int[8];
+    public int[] ut_dropRate = new int[8];
+    public int ut_autoSpinTimes;
+
     [Header("Main Game")]
     public TextMeshProUGUI[] itemAmount;
     public TextMeshProUGUI winText;
@@ -54,7 +61,7 @@ public class SpinWheel : MonoBehaviour
     public TextMeshProUGUI totalSpinText;
     public TextMeshProUGUI[] sectorSpinText;
     public TextMeshProUGUI[] sectorRateText;
-    public TextMeshProUGUI[] amountReportText;
+    public TextMeshProUGUI[] reportText;
     private int totalSpin;
 
     [Header("Custom")]
@@ -64,9 +71,6 @@ public class SpinWheel : MonoBehaviour
     public TMP_InputField[] amountInput;
     public TextMeshProUGUI[] amountText;
     public TMP_Dropdown[] prizeType;
-
-    [Header("Unit Testing")]
-    private int[] testSectors = new int[8];
 
     [HideInInspector]
     public GameObject[] wheelGame;
@@ -97,12 +101,12 @@ public class SpinWheel : MonoBehaviour
 
     private void Start()
     {
-        //Update items status UI
-        for (int i = 0; i < 5; i++)
-            itemAmount[i].text = items[i].Amount.ToString();
+        if (UnitTestingOn)
+        {
+            UnitTesting_1_ManuallyCheckSectors();
+            UnitTesting_2_AutoSpinPrintResult();
+        }
         UpdateEstimatedDropRates();
-        //TestSectorsDropRates();
-
         wheelGame = GameObject.FindGameObjectsWithTag("WheelGame");
     }
 
@@ -205,7 +209,7 @@ public class SpinWheel : MonoBehaviour
                 amountText[i].text = sectors[i].Amount + " min";
             else
                 amountText[i].text = "x" + sectors[i].Amount;
-            amountReportText[i].text = sectors[i].Type + " " + amountText[i].text;
+            reportText[i].text = sectors[i].Type + " " + amountText[i].text;
         }
     }
 
@@ -289,20 +293,40 @@ public class SpinWheel : MonoBehaviour
     }
 
     //Unit Testing----------------------------------------------------------------------------------------
-    private void TestSectorsDropRates()
+    private void UnitTesting_1_ManuallyCheckSectors()
     {
-        for (int i = 0; i < 1000; i++)
+        for(int i = 0; i < 8; i++)
+        {
+            sectors[i].Type = ut_prizeType[i];
+            sectors[i].Amount = ut_amount[i];
+            sectors[i].DropRate = ut_dropRate[i];
+        }
+        UpdateEstimatedDropRates();
+        UpdatePrize();
+    }
+
+    private void UnitTesting_2_AutoSpinPrintResult()
+    {
+        int[] spinTimes = new int[8];
+        for (int i = 0; i < ut_autoSpinTimes; i++)
         {
             int r = Random.Range(0, 100);
             for (int j = 0; j < 8; j++)
             {
                 if (r >= sectors[j].DropRateMin && r <= sectors[j].DropRateMax)
                 {
-                    testSectors[j]++;
+                    spinTimes[j]++;
                 }
             }
         }
         for (int k = 0; k < 8; k++)
-            Debug.Log((k+1).ToString() + ": " + testSectors[k]/10 + "%");
+        {
+            Debug.Log("Sector " + (k + 1).ToString() + ": " + reportText[k].text);
+            Debug.Log("Total Amount: " + sectors[k].Amount * spinTimes[k]);
+            Debug.Log("Win: " + spinTimes[k] + " times");
+            Debug.Log("Actual Drop Rate: " + (float)spinTimes[k] / ut_autoSpinTimes * 100 + "%");
+            Debug.Log("Estimated Drop Rate: " + sectors[k].DropRate + "%");
+            Debug.Log("---------------------------------------------------------");
+        }
     }
 }
