@@ -57,9 +57,12 @@ public class SpinWheel : MonoBehaviour
     private int totalSpin;
 
     [Header("Custom")]
-    public TMP_InputField[] dropRateInput;
     public TextMeshProUGUI errorText;
+    public TMP_InputField[] dropRateInput;
     public TextMeshProUGUI[] dropRateText;
+    public TMP_InputField[] amountInput;
+    public TextMeshProUGUI[] amountText;
+    public TMP_Dropdown[] prizeType;
 
     [Header("Unit Testing")]
     private int[] testSectors = new int[8];
@@ -164,9 +167,10 @@ public class SpinWheel : MonoBehaviour
         {
             sectors[i].DropRateMin = sectors[i - 1].DropRateMax + 1;
             sectors[i].DropRateMax = sectors[i].DropRateMin + sectors[i].DropRate - 1;
+            dropRateText[i].text = sectors[i].DropRate.ToString() + "%";
         }
-        for (int i = 0; i < 8; i++)
-            Debug.Log("#" + (i+1) + ": " + sectors[i].DropRateMin + " - " + sectors[i].DropRateMax);
+        //for (int i = 0; i < 8; i++)
+            //Debug.Log("#" + (i+1) + ": " + sectors[i].DropRateMin + " - " + sectors[i].DropRateMax);
     }
 
     private void UpdateActualDropRates()
@@ -206,49 +210,65 @@ public class SpinWheel : MonoBehaviour
     }
 
     //Button Functions------------------------------------------------------------------------------------
-    public void PressSpinButton()
+    public void SpinButton()
     {
         if(canSpin)
             StartCoroutine(Spin());
     }
 
-    public void ApplyDropRateChange()
+    public void ApplyButton()
     {
-        int sum = 0, temp = 0;
+        int sum = 0, tempRate = 0, tempAmount = 0;
         int[] rate = new int[8];
-        bool madeChange = false;
-        for (int i = 0; i < 8; i++) //Get input
+        bool madeChange_DropRate = false, madeChange_Amount = false, madeChange_Prize = false;
+
+        for (int i = 0; i < 8; i++)
         {
-            int.TryParse(dropRateInput[i].text, out temp);
-            if (dropRateInput[i].text != "" && temp != sectors[i].DropRate)
+            //Get drop rate input
+            int.TryParse(dropRateInput[i].text, out tempRate); 
+            if (dropRateInput[i].text != "" && tempRate != sectors[i].DropRate)
             {
-                rate[i] = temp;
-                madeChange = true;
+                rate[i] = tempRate;
+                madeChange_DropRate = true;
             }  
             else
                 rate[i] = sectors[i].DropRate;
             sum += rate[i];
+            
+            //Get amount input
+            int.TryParse(amountInput[i].text, out tempAmount);
+            if (amountInput[i].text != "" && tempAmount != sectors[i].Amount)
+            {
+                sectors[i].Amount = tempAmount;
+                if (prizeType[i].value == 0)
+                    amountText[i].text = sectors[i].Amount + " min";
+                else
+                    amountText[i].text = "x" + sectors[i].Amount;
+                madeChange_DropRate = true;
+            }
         }
-        if (madeChange) //Check input
+
+        if (madeChange_DropRate) //Check drop rate input
         {
             if (sum == 100)
             {
                 for (int i = 0; i < 8; i++)
-                {
                     sectors[i].DropRate = rate[i];
-                    dropRateText[i].text = sectors[i].DropRate.ToString() + "%";
-                }
                 errorText.text = "Change applied";
                 UpdateEstimatedDropRates();
             }
             else
                 errorText.text = "The total popularity isn't 100%";
         }
-        else
+
+        if (!madeChange_DropRate && !madeChange_Amount && !madeChange_Amount)
             errorText.text = "you didn't make any change";
 
-        for (int i = 0; i < 8; i++) //Set UI
+        for (int i = 0; i < 8; i++)
+        {
             dropRateInput[i].text = "";
+            amountInput[i].text = "";
+        }
     }
 
     //Unit Testing----------------------------------------------------------------------------------------
