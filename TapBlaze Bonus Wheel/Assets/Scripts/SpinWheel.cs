@@ -131,34 +131,21 @@ public class SpinWheel : MonoBehaviour
             } 
         }
 
-        if (autoSpinTime == 1)
+        //Spin the wheel and control spinning speed
+        for (int i = 0; i < rotateTimes; i++)
         {
-            //Spin the wheel and control spinning speed
-            for (int i = 0; i < rotateTimes; i++)
-            {
-                transform.Rotate(0, 0, 22.5f);
-                if (i > Mathf.RoundToInt(rotateTimes * .5f))
-                    timeInterval = .1f;
-                if (i > Mathf.RoundToInt(rotateTimes * .85f))
-                    timeInterval = .2f;
-                yield return new WaitForSeconds(timeInterval);
-            }
-
-            //When wheel stops
-            if (Mathf.RoundToInt(transform.eulerAngles.z) % 45 != 0)
-                transform.Rotate(0, 0, 22.5f);
-        }
-        else
-        {
-            flame.SetActive(true);
-            for (int i = 0; i < 150; i++)
-            {
-                transform.Rotate(0, 0, 45f);
-                yield return new WaitForSeconds(.01f);
-            }
-            flame.SetActive(false);
+            transform.Rotate(0, 0, 22.5f);
+            if (i > Mathf.RoundToInt(rotateTimes * .5f))
+                timeInterval = .1f;
+            if (i > Mathf.RoundToInt(rotateTimes * .85f))
+                timeInterval = .2f;
+            yield return new WaitForSeconds(timeInterval);
         }
 
+        //When wheel stops
+        if (Mathf.RoundToInt(transform.eulerAngles.z) % 45 != 0)
+            transform.Rotate(0, 0, 22.5f);
+        
         //Find the index of current pointed sector
         finalAngle = Mathf.RoundToInt(transform.eulerAngles.z);
         pointedSector = finalAngle / 45;
@@ -177,7 +164,46 @@ public class SpinWheel : MonoBehaviour
         sectorSpinText[pointedSector].text = sectors[pointedSector].SpinTimes.ToString();
         UpdateActualDropRates();
         DisplaySpinResult();
+        canSpin = true;
+    }
 
+    private IEnumerator AutoSpin()
+    {
+        canSpin = false;
+        for (int a = 0; a < autoSpinTime; a++)
+        {
+            totalSpin++;
+            int spinResult = Random.Range(0, 100);
+            for (int i = 0; i < 8; i++)
+            {
+                if (spinResult >= sectors[i].DropRateMin && spinResult <= sectors[i].DropRateMax)
+                {
+                    pointedSector = i;
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if (items[j].Type == sectors[i].Type)
+                        {
+                            items[j].Amount += sectors[i].Amount;
+                            itemAmount[j].text = items[j].Amount.ToString();
+                        }
+                    }
+                    sectors[i].SpinTimes++;
+                    sectorSpinText[i].text = sectors[i].SpinTimes.ToString();
+                }
+            }
+        }
+
+        flame.SetActive(true);
+        for (int i = 0; i < 150; i++)
+        {
+            transform.Rotate(0, 0, 45f);
+            yield return new WaitForSeconds(.01f);
+        }
+        flame.SetActive(false);
+
+        totalSpinText.text = "Total Spin: " + totalSpin + " times";
+        UpdateActualDropRates();
+        DisplaySpinResult();
         canSpin = true;
     }
 
@@ -247,8 +273,14 @@ public class SpinWheel : MonoBehaviour
     //Button Functions------------------------------------------------------------------------------------
     public void SpinButton()
     {
-        if(canSpin)
-            StartCoroutine(Spin());
+        if (canSpin)
+        {
+            if (autoSpinTime == 1)
+                StartCoroutine(Spin());
+            else
+                StartCoroutine(AutoSpin());
+        }
+            
     }
 
     public void ApplyButton()
