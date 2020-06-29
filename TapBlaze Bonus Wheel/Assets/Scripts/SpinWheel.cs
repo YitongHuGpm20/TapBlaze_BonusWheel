@@ -54,6 +54,7 @@ public class SpinWheel : MonoBehaviour
     public TextMeshProUGUI totalSpinText;
     public TextMeshProUGUI[] sectorSpinText;
     public TextMeshProUGUI[] sectorRateText;
+    public TextMeshProUGUI[] amountReportText;
     private int totalSpin;
 
     [Header("Custom")]
@@ -99,7 +100,6 @@ public class SpinWheel : MonoBehaviour
         //Update items status UI
         for (int i = 0; i < 5; i++)
             itemAmount[i].text = items[i].Amount.ToString();
-
         UpdateEstimatedDropRates();
         //TestSectorsDropRates();
 
@@ -167,10 +167,11 @@ public class SpinWheel : MonoBehaviour
         {
             sectors[i].DropRateMin = sectors[i - 1].DropRateMax + 1;
             sectors[i].DropRateMax = sectors[i].DropRateMin + sectors[i].DropRate - 1;
-            dropRateText[i].text = sectors[i].DropRate.ToString() + "%";
         }
+        for (int i = 0; i < 8; i++)
+            dropRateText[i].text = sectors[i].DropRate.ToString() + "%";
         //for (int i = 0; i < 8; i++)
-            //Debug.Log("#" + (i+1) + ": " + sectors[i].DropRateMin + " - " + sectors[i].DropRateMax);
+        //    Debug.Log("#" + (i+1) + ": " + sectors[i].DropRateMin + " - " + sectors[i].DropRateMax);
     }
 
     private void UpdateActualDropRates()
@@ -195,6 +196,18 @@ public class SpinWheel : MonoBehaviour
             }
         }
     }//Calculate the actual drop rate of each sector and push result to Report Window
+
+    private void UpdateAmount()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (prizeType[i].value == 0)
+                amountText[i].text = sectors[i].Amount + " min";
+            else
+                amountText[i].text = "x" + sectors[i].Amount;
+            amountReportText[i].text = sectors[i].Type + " " + amountText[i].text;
+        }
+    }
 
     private void DisplaySpinResult()
     {
@@ -240,12 +253,10 @@ public class SpinWheel : MonoBehaviour
             if (amountInput[i].text != "" && tempAmount != sectors[i].Amount)
             {
                 sectors[i].Amount = tempAmount;
-                if (prizeType[i].value == 0)
-                    amountText[i].text = sectors[i].Amount + " min";
-                else
-                    amountText[i].text = "x" + sectors[i].Amount;
-                madeChange_DropRate = true;
+                madeChange_Amount = true;
             }
+
+            //Get prize type change
         }
 
         if (madeChange_DropRate) //Check drop rate input
@@ -260,8 +271,9 @@ public class SpinWheel : MonoBehaviour
             else
                 errorText.text = "The total popularity isn't 100%";
         }
-
-        if (!madeChange_DropRate && !madeChange_Amount && !madeChange_Amount)
+        if (madeChange_Amount)
+            UpdateAmount();
+        if (!madeChange_DropRate && !madeChange_Amount && !madeChange_Prize)
             errorText.text = "you didn't make any change";
 
         for (int i = 0; i < 8; i++)
