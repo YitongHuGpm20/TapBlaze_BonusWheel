@@ -82,7 +82,9 @@ public class SpinWheel : MonoBehaviour
     public GameObject autoSpinOptions;
     public TextMeshProUGUI autoSpinButtonText;
     public GameObject flame;
+    public TextMeshProUGUI[] autoSpinPrizeText;
     private int autoSpinTime;
+    private int[] increasedAmount = new int[5];
 
     [HideInInspector]
     public GameObject[] wheelGame;
@@ -179,6 +181,7 @@ public class SpinWheel : MonoBehaviour
     private IEnumerator AutoSpin()
     {
         canSpin = false;
+        System.Array.Clear(increasedAmount, 0, 5);
         for (int a = 0; a < autoSpinTime; a++)
         {
             totalSpin++;
@@ -193,7 +196,7 @@ public class SpinWheel : MonoBehaviour
                         if (items[j].Type == sectors[i].Type)
                         {
                             items[j].Amount += sectors[i].Amount;
-                            itemAmount[j].text = items[j].Amount.ToString();
+                            increasedAmount[j] += sectors[i].Amount;
                         }
                     }
                     sectors[i].SpinTimes++;
@@ -210,6 +213,8 @@ public class SpinWheel : MonoBehaviour
         }
         flame.SetActive(false);
 
+        for (int i = 0; i < 5; i++)
+            itemAmount[i].text = items[i].Amount.ToString();
         totalSpinText.text = "Total Spin: " + totalSpin + " times";
         UpdateActualDropRates();
         DisplaySpinResult();
@@ -310,6 +315,9 @@ public class SpinWheel : MonoBehaviour
         {
             win.transform.GetChild(1).gameObject.SetActive(false);
             win.transform.GetChild(2).gameObject.SetActive(true);
+            autoSpinPrizeText[0].text = "Life " + increasedAmount[0] + " min";
+            for (int i = 1; i < 5; i++)
+                autoSpinPrizeText[i].text = types[i] + " x" + increasedAmount[i];
         }
     }
 
