@@ -197,7 +197,7 @@ public class SpinWheel : MonoBehaviour
         }
     }//Calculate the actual drop rate of each sector and push result to Report Window
 
-    private void UpdateAmount()
+    private void UpdatePrize()
     {
         for (int i = 0; i < 8; i++)
         {
@@ -233,7 +233,7 @@ public class SpinWheel : MonoBehaviour
     {
         int sum = 0, tempRate = 0, tempAmount = 0;
         int[] rate = new int[8];
-        bool madeChange_DropRate = false, madeChange_Amount = false, madeChange_Prize = false;
+        bool madeChange_DropRate = false, madeChange_Amount = false, madeChange_PrizeType = false;
 
         for (int i = 0; i < 8; i++)
         {
@@ -257,6 +257,11 @@ public class SpinWheel : MonoBehaviour
             }
 
             //Get prize type change
+            if (prizeType[i].options[prizeType[i].value].text != sectors[i].Type)
+            {
+                sectors[i].Type = prizeType[i].options[prizeType[i].value].text;
+                madeChange_PrizeType = true;
+            }
         }
 
         if (madeChange_DropRate) //Check drop rate input
@@ -271,9 +276,9 @@ public class SpinWheel : MonoBehaviour
             else
                 errorText.text = "The total popularity isn't 100%";
         }
-        if (madeChange_Amount)
-            UpdateAmount();
-        if (!madeChange_DropRate && !madeChange_Amount && !madeChange_Prize)
+        if (madeChange_PrizeType || madeChange_Amount)
+            UpdatePrize();
+        if (!madeChange_DropRate && !madeChange_Amount && !madeChange_PrizeType)
             errorText.text = "you didn't make any change";
 
         for (int i = 0; i < 8; i++)
