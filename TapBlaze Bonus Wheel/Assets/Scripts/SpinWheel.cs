@@ -42,9 +42,15 @@ public class SpinWheel : MonoBehaviour
     private int finalAngle;
     private int pointedSector;
     private int[] testSectors = new int[8];
+    private int totalSpin;
+    private int[] sectorSpin = new int[8];
+    private float[] sectorRate = new float[8];
 
     public TextMeshProUGUI winText;
     public TextMeshProUGUI[] itemAmount;
+    public TextMeshProUGUI totalSpinText;
+    public TextMeshProUGUI[] sectorSpinText;
+    public TextMeshProUGUI[] sectorRateText;
 
     //string[] prizeTypes = new string[] { "Life", "Brush", "Gem", "Hammer", "Coin" };
 
@@ -69,6 +75,12 @@ public class SpinWheel : MonoBehaviour
 
         canSpin = true;
         pointedSector = 0;
+        totalSpin = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            sectorSpin[i] = 0;
+            sectorRate[i] = 0;
+        }
     }
 
     private void Start()
@@ -77,19 +89,15 @@ public class SpinWheel : MonoBehaviour
         for (int i = 0; i < 5; i++)
             itemAmount[i].text = items[i].Amount.ToString();
 
-        UpdateDropRates();
+        UpdateEstimatedDropRates();
         //TestSectorsDropRates();
-    }
-
-    private void Update()
-    {
-        
     }
 
     private IEnumerator Spin()
     {
         canSpin = false;
         float timeInterval = 0.05f;
+        totalSpin++;
         int spinResult = Random.Range(0, 100);
         int rotateTimes = 0;
         for (int i = 0; i < 8; i++)
@@ -119,7 +127,7 @@ public class SpinWheel : MonoBehaviour
         //Update result
         finalAngle = Mathf.RoundToInt(transform.eulerAngles.z);
         pointedSector = finalAngle / 45;
-        winText.text = "You win Prize #" + (pointedSector + 1).ToString();
+        winText.text = "You win Prize #" + (pointedSector + 1);
         for(int i = 0; i < 5; i++)
         {
             if(items[i].Type == sectors[pointedSector].Type)
@@ -130,9 +138,13 @@ public class SpinWheel : MonoBehaviour
         }
 
         canSpin = true;
+        totalSpinText.text = "Total Spin: " + totalSpin + " times";
+        sectorSpin[pointedSector]++;
+        sectorSpinText[pointedSector].text = sectorSpin[pointedSector].ToString();
+        UpdateActualDropRates();
     }
 
-    private void UpdateDropRates()
+    private void UpdateEstimatedDropRates()
     {
         sectors[0].DropRateMin = 0;
         sectors[0].DropRateMax = sectors[0].DropRate - 1;
@@ -142,7 +154,30 @@ public class SpinWheel : MonoBehaviour
             sectors[i].DropRateMax = sectors[i].DropRateMin + sectors[i].DropRate - 1;
         }
         //for (int i = 0; i < 8; i++)
-            //Debug.Log("#" + (i+1).ToString() + ": " + sectors[i].DropRateMin.ToString() + " - " + sectors[i].DropRateMax.ToString());
+            //Debug.Log("#" + (i+1) + ": " + sectors[i].DropRateMin + " - " + sectors[i].DropRateMax);
+    }
+
+    private void UpdateActualDropRates()
+    {
+        for(int i = 0; i < 8; i++)
+        {
+            sectorRate[i] = (float)sectorSpin[i] / totalSpin * 100;
+            if((int)sectorRate[i] > sectors[i].DropRate)
+            {
+                sectorRateText[i].color = Color.green;
+                sectorRateText[i].text = sectorRate[i] + "% ↑";
+            }
+            else if ((int)sectorRate[i] < sectors[i].DropRate)
+            {
+                sectorRateText[i].color = Color.red;
+                sectorRateText[i].text = sectorRate[i] + "% ↓";
+            }
+            else if ((int)sectorRate[i] == sectors[i].DropRate)
+            {
+                sectorRateText[i].color = Color.black;
+                sectorRateText[i].text = sectorRate[i] + "%";
+            }
+        }
     }
 
     //Button Functions------------------------------------------------------------------------------------
