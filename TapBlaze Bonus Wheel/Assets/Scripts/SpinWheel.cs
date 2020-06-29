@@ -60,6 +60,7 @@ public class SpinWheel : MonoBehaviour
     private int finalAngle;
     private int pointedSector;
     private string[] types = { "Life", "Brush", "Gem", "Hammer", "Coin" };
+    private Vector2[] winIconSize = { new Vector2(165.6f, 150), new Vector2(127.7f, 150), new Vector2(120, 150), new Vector2(166.7f, 150), new Vector2(150, 150) };
     
 
     [Header("Report")]
@@ -303,6 +304,7 @@ public class SpinWheel : MonoBehaviour
             win.transform.GetChild(1).gameObject.SetActive(true);
             win.transform.GetChild(2).gameObject.SetActive(false);
             win.transform.GetChild(1).transform.GetChild(0).GetComponent<Image>().sprite = itemImages[System.Array.IndexOf(types, sectors[pointedSector].Type)];
+            win.transform.GetChild(1).transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = winIconSize[System.Array.IndexOf(types, sectors[pointedSector].Type)];
         }
         else
         {
