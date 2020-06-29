@@ -40,25 +40,32 @@ public class SpinWheel : MonoBehaviour
         }
     }
 
+    [Header("Main Game")]
+    public TextMeshProUGUI[] itemAmount;
+    public TextMeshProUGUI winText;
+    public GameObject win;
     private Sector[] sectors = new Sector[8];
     private Item[] items = new Item[5];
     private bool canSpin;
     private int finalAngle;
     private int pointedSector;
-    private int[] testSectors = new int[8];
-    private int totalSpin;
 
-    public TextMeshProUGUI[] itemAmount;
+    [Header("Report")]
     public TextMeshProUGUI totalSpinText;
     public TextMeshProUGUI[] sectorSpinText;
     public TextMeshProUGUI[] sectorRateText;
-    public TextMeshProUGUI winText;
-    public GameObject win;
+    private int totalSpin;
+
+    [Header("Custom")]
+    public TMP_InputField[] dropRateInput;
+    public TextMeshProUGUI errorText;
+    public TextMeshProUGUI[] rateInput;
+
+    [Header("Unit Testing")]
+    private int[] testSectors = new int[8];
 
     [HideInInspector]
     public GameObject[] wheelGame;
-
-    //string[] prizeTypes = new string[] { "Life", "Brush", "Gem", "Hammer", "Coin" };
 
     private void Awake()
     {
@@ -205,6 +212,49 @@ public class SpinWheel : MonoBehaviour
             StartCoroutine(Spin());
     }
 
+    public void ApplyDropRateChange()
+    {
+        int sum = 0, temp = 0;
+        int[] rate = new int[8];
+        bool madeChange = false;
+        for (int i = 0; i < 8; i++) //Get input
+        {
+            int.TryParse(dropRateInput[i].text, out temp);
+            if (dropRateInput[i].text != "" && temp != sectors[i].DropRate)
+            {
+                rate[i] = temp;
+                madeChange = true;
+            }  
+            else
+                rate[i] = sectors[i].DropRate;
+            sum += rate[i];
+        }
+        if (madeChange) //Check input
+        {
+            if (sum == 100)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    sectors[i].DropRate = rate[i];
+                    rateInput[i].text = sectors[i].DropRate.ToString() + "%";
+                }
+                errorText.text = "Change applied";
+                UpdateEstimatedDropRates();
+
+            }
+            else
+            {
+                errorText.text = "The total popularity isn't 100%";
+                //set the inputfields back
+            }
+        }
+        else
+            errorText.text = "you didn't make any change";
+
+        for (int i = 0; i < 8; i++) //Set UI
+            dropRateInput[i].text = "";
+    }
+
     //Unit Testing----------------------------------------------------------------------------------------
     private void TestSectorsDropRates()
     {
@@ -222,12 +272,4 @@ public class SpinWheel : MonoBehaviour
         for (int k = 0; k < 8; k++)
             Debug.Log((k+1).ToString() + ": " + testSectors[k]/10 + "%");
     }
-
-    private bool areDropRatesGood()
-    {
-        int sum = 0;
-        for(int i = 0; i < 8; i++)
-            sum += sectors[i].DropRate;
-        return sum == 100;
-    }//Check if the total of every sector's drop chance is 100%
 }
