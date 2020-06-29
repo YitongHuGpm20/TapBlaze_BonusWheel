@@ -39176,15 +39176,15 @@ MonoBehaviour:
   - {fileID: 464203745}
   - {fileID: 1462067422}
   errorText: {fileID: 1216883516}
-  rateInput:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  dropRateText:
+  - {fileID: 707796406}
+  - {fileID: 1103286790}
+  - {fileID: 307681189}
+  - {fileID: 615886989}
+  - {fileID: 786793827}
+  - {fileID: 2003209052}
+  - {fileID: 767117593}
+  - {fileID: 2041790832}
   wheelGame: []
 --- !u!1 &1752867759
 GameObject:

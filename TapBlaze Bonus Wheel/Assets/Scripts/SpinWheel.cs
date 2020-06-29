@@ -59,7 +59,7 @@ public class SpinWheel : MonoBehaviour
     [Header("Custom")]
     public TMP_InputField[] dropRateInput;
     public TextMeshProUGUI errorText;
-    public TextMeshProUGUI[] rateInput;
+    public TextMeshProUGUI[] dropRateText;
 
     [Header("Unit Testing")]
     private int[] testSectors = new int[8];
@@ -165,8 +165,8 @@ public class SpinWheel : MonoBehaviour
             sectors[i].DropRateMin = sectors[i - 1].DropRateMax + 1;
             sectors[i].DropRateMax = sectors[i].DropRateMin + sectors[i].DropRate - 1;
         }
-        //for (int i = 0; i < 8; i++)
-            //Debug.Log("#" + (i+1) + ": " + sectors[i].DropRateMin + " - " + sectors[i].DropRateMax);
+        for (int i = 0; i < 8; i++)
+            Debug.Log("#" + (i+1) + ": " + sectors[i].DropRateMin + " - " + sectors[i].DropRateMax);
     }
 
     private void UpdateActualDropRates()
@@ -236,17 +236,13 @@ public class SpinWheel : MonoBehaviour
                 for (int i = 0; i < 8; i++)
                 {
                     sectors[i].DropRate = rate[i];
-                    rateInput[i].text = sectors[i].DropRate.ToString() + "%";
+                    dropRateText[i].text = sectors[i].DropRate.ToString() + "%";
                 }
                 errorText.text = "Change applied";
                 UpdateEstimatedDropRates();
-
             }
             else
-            {
                 errorText.text = "The total popularity isn't 100%";
-                //set the inputfields back
-            }
         }
         else
             errorText.text = "you didn't make any change";
