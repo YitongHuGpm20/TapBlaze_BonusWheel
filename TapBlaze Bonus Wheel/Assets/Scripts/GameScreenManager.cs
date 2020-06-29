@@ -12,6 +12,7 @@ public class GameScreenManager : MonoBehaviour
     public GameObject report;
     public GameObject autoSpinOptions;
     public GameObject settings;
+    public GameObject win;
 
     public void ToggleOptions()
     {
@@ -43,5 +44,15 @@ public class GameScreenManager : MonoBehaviour
     public void ToggleSettings()
     {
         settings.SetActive(!settings.activeSelf);
+    }
+
+    public void ClaimButton()
+    {
+        win.SetActive(false);
+    }
+
+    public void HomeButton()
+    {
+        SceneManager.LoadScene(0);
     }
 }
