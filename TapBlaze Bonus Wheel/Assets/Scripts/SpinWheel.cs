@@ -13,14 +13,18 @@ public class SpinWheel : MonoBehaviour
         public int DropRate;
         public int DropRateMin;
         public int DropRateMax;
+        public int SpinTimes;
+        public float ActualDropRate;
 
-        public Sector(string type, int amount, int dropRate, int min, int max)
+        public Sector(string type, int amount, int dropRate, int min, int max, int spinTimes, float aDropRate)
         {
             Type = type;
             Amount = amount;
             DropRate = dropRate;
             DropRateMin = min;
             DropRateMax = max;
+            SpinTimes = spinTimes;
+            ActualDropRate = aDropRate;
         }
     }
 
@@ -43,28 +47,30 @@ public class SpinWheel : MonoBehaviour
     private int pointedSector;
     private int[] testSectors = new int[8];
     private int totalSpin;
-    private int[] sectorSpin = new int[8];
-    private float[] sectorRate = new float[8];
 
-    public TextMeshProUGUI winText;
     public TextMeshProUGUI[] itemAmount;
     public TextMeshProUGUI totalSpinText;
     public TextMeshProUGUI[] sectorSpinText;
     public TextMeshProUGUI[] sectorRateText;
+    public TextMeshProUGUI winText;
+    public GameObject win;
+
+    [HideInInspector]
+    public GameObject[] wheelGame;
 
     //string[] prizeTypes = new string[] { "Life", "Brush", "Gem", "Hammer", "Coin" };
 
     private void Awake()
     {
         //Default wheel sections
-        sectors[0] = new Sector("Life", 30, 20, 0, 0);
-        sectors[1] = new Sector("Brush", 3, 10, 0, 0);
-        sectors[2] = new Sector("Gem", 35, 10, 0, 0);
-        sectors[3] = new Sector("Hammer", 3, 10, 0, 0);
-        sectors[4] = new Sector("Coin", 750, 5, 0, 0);
-        sectors[5] = new Sector("Brush", 1, 20, 0, 0);
-        sectors[6] = new Sector("Gem", 75, 5, 0, 0);
-        sectors[7] = new Sector("Hammer", 1, 20, 0, 0);
+        sectors[0] = new Sector("Life", 30, 20, 0, 0, 0, 0);
+        sectors[1] = new Sector("Brush", 3, 10, 0, 0, 0, 0);
+        sectors[2] = new Sector("Gem", 35, 10, 0, 0, 0, 0);
+        sectors[3] = new Sector("Hammer", 3, 10, 0, 0, 0, 0);
+        sectors[4] = new Sector("Coin", 750, 5, 0, 0, 0, 0);
+        sectors[5] = new Sector("Brush", 1, 20, 0, 0, 0, 0);
+        sectors[6] = new Sector("Gem", 75, 5, 0, 0, 0, 0);
+        sectors[7] = new Sector("Hammer", 1, 20, 0, 0, 0, 0);
 
         //Default item status
         items[0] = new Item("Life", 0);
@@ -76,11 +82,6 @@ public class SpinWheel : MonoBehaviour
         canSpin = true;
         pointedSector = 0;
         totalSpin = 0;
-        for (int i = 0; i < 8; i++)
-        {
-            sectorSpin[i] = 0;
-            sectorRate[i] = 0;
-        }
     }
 
     private void Start()
@@ -91,6 +92,8 @@ public class SpinWheel : MonoBehaviour
 
         UpdateEstimatedDropRates();
         //TestSectorsDropRates();
+
+        wheelGame = GameObject.FindGameObjectsWithTag("WheelGame");
     }
 
     private IEnumerator Spin()
@@ -109,7 +112,7 @@ public class SpinWheel : MonoBehaviour
             } 
         }
 
-        //Slow down the wheel
+        //Spin the wheel and control spinning speed
         for (int i = 0; i < rotateTimes; i++) 
         {
             transform.Rotate(0, 0, 22.5f);
@@ -124,11 +127,12 @@ public class SpinWheel : MonoBehaviour
         if (Mathf.RoundToInt(transform.eulerAngles.z) % 45 != 0)
             transform.Rotate(0, 0, 22.5f);
 
-        //Update result
+        //Find the index of current pointed sector
         finalAngle = Mathf.RoundToInt(transform.eulerAngles.z);
         pointedSector = finalAngle / 45;
-        winText.text = "You win Prize #" + (pointedSector + 1);
-        for(int i = 0; i < 5; i++)
+
+        //Update spin result to UI
+        for (int i = 0; i < 5; i++)
         {
             if(items[i].Type == sectors[pointedSector].Type)
             {
@@ -136,12 +140,13 @@ public class SpinWheel : MonoBehaviour
                 itemAmount[i].text = items[i].Amount.ToString();
             }
         }
+        totalSpinText.text = "Total Spin: " + totalSpin + " times";
+        sectors[pointedSector].SpinTimes++;
+        sectorSpinText[pointedSector].text = sectors[pointedSector].SpinTimes.ToString();
+        UpdateActualDropRates();
+        DisplaySpinResult();
 
         canSpin = true;
-        totalSpinText.text = "Total Spin: " + totalSpin + " times";
-        sectorSpin[pointedSector]++;
-        sectorSpinText[pointedSector].text = sectorSpin[pointedSector].ToString();
-        UpdateActualDropRates();
     }
 
     private void UpdateEstimatedDropRates()
@@ -161,23 +166,41 @@ public class SpinWheel : MonoBehaviour
     {
         for(int i = 0; i < 8; i++)
         {
-            sectorRate[i] = (float)sectorSpin[i] / totalSpin * 100;
-            if((int)sectorRate[i] > sectors[i].DropRate)
+            sectors[i].ActualDropRate = (float)sectors[i].SpinTimes / totalSpin * 100;
+            if((int)sectors[i].ActualDropRate > sectors[i].DropRate)
             {
                 sectorRateText[i].color = Color.green;
-                sectorRateText[i].text = sectorRate[i] + "% ↑";
+                sectorRateText[i].text = sectors[i].ActualDropRate + "% ↑";
             }
-            else if ((int)sectorRate[i] < sectors[i].DropRate)
+            else if ((int)sectors[i].ActualDropRate < sectors[i].DropRate)
             {
                 sectorRateText[i].color = Color.red;
-                sectorRateText[i].text = sectorRate[i] + "% ↓";
+                sectorRateText[i].text = sectors[i].ActualDropRate + "% ↓";
             }
-            else if ((int)sectorRate[i] == sectors[i].DropRate)
+            else if ((int)sectors[i].ActualDropRate == sectors[i].DropRate)
             {
                 sectorRateText[i].color = Color.black;
-                sectorRateText[i].text = sectorRate[i] + "%";
+                sectorRateText[i].text = sectors[i].ActualDropRate + "%";
             }
         }
+    }//Calculate the actual drop rate of each sector and push result to Report Window
+
+    private void DisplaySpinResult()
+    {
+        //TODO: update icon
+
+        if (sectors[pointedSector].Type == "Life")
+            winText.text = sectors[pointedSector].Type + " " + sectors[pointedSector].Amount + " min";
+        else
+            winText.text = sectors[pointedSector].Type + " x" + sectors[pointedSector].Amount;
+        if (wheelGame != null)
+        {
+            
+            Debug.Log("hi");
+        }  
+        foreach (GameObject w in wheelGame)
+            w.gameObject.SetActive(false);
+        win.SetActive(true);
     }
 
     //Button Functions------------------------------------------------------------------------------------

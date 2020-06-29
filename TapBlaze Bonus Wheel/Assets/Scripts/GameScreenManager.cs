@@ -14,6 +14,14 @@ public class GameScreenManager : MonoBehaviour
     public GameObject settings;
     public GameObject win;
 
+    [HideInInspector]
+    public GameObject[] wheelGame;
+
+    private void Start()
+    {
+        wheelGame = GameObject.FindGameObjectsWithTag("WheelGame");
+    }
+
     public void ToggleOptions()
     {
         options.SetActive(!options.activeSelf);
@@ -48,6 +56,8 @@ public class GameScreenManager : MonoBehaviour
 
     public void ClaimButton()
     {
+        foreach (GameObject w in wheelGame)
+            w.gameObject.SetActive(true);
         win.SetActive(false);
     }
 
