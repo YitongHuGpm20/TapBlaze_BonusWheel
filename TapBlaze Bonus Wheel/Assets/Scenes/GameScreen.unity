@@ -3841,7 +3841,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 215014510}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1752443995}
+        m_MethodName: AutoSpin_100_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &215014510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30154,7 +30165,7 @@ GameObject:
   - component: {fileID: 1383803604}
   - component: {fileID: 1383803603}
   m_Layer: 5
-  m_Name: x1000Button
+  m_Name: x1kButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30222,7 +30233,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1383803604}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1752443995}
+        m_MethodName: AutoSpin_1k_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1383803604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39160,6 +39182,7 @@ MonoBehaviour:
   - {fileID: 1088523778}
   winText: {fileID: 1618900096}
   win: {fileID: 736894763}
+  autoSpinOptions: {fileID: 1060583060}
   totalSpinText: {fileID: 1314582885}
   sectorSpinText:
   - {fileID: 206332575}
@@ -47285,7 +47308,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2109511362}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1752443995}
+        m_MethodName: AutoSpin_10_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2109511362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47766,7 +47800,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2139365667}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1752443995}
+        m_MethodName: AutoSpin_1_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2139365667
 MonoBehaviour:
   m_ObjectHideFlags: 0

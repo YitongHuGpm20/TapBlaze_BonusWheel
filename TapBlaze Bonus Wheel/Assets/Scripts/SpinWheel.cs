@@ -51,11 +51,14 @@ public class SpinWheel : MonoBehaviour
     public TextMeshProUGUI[] itemAmount;
     public TextMeshProUGUI winText;
     public GameObject win;
+    public GameObject autoSpinOptions;
+    public TextMeshProUGUI autoSpinButtonText;
     private Sector[] sectors = new Sector[8];
     private Item[] items = new Item[5];
     private bool canSpin;
     private int finalAngle;
     private int pointedSector;
+    private int autoSpinTime;
 
     [Header("Report")]
     public TextMeshProUGUI totalSpinText;
@@ -97,6 +100,7 @@ public class SpinWheel : MonoBehaviour
         canSpin = true;
         pointedSector = 0;
         totalSpin = 0;
+        autoSpinTime = 1;
     }
 
     private void Start()
@@ -290,6 +294,36 @@ public class SpinWheel : MonoBehaviour
             dropRateInput[i].text = "";
             amountInput[i].text = "";
         }
+    }
+
+    public void AutoSpin_1_Button()
+    {
+        autoSpinTime = 1;
+        autoSpinOptions.SetActive(false);
+        autoSpinButtonText.text = "x1";
+        autoSpinButtonText.fontSize = 24;
+    }
+
+    public void AutoSpin_10_Button()
+    {
+        autoSpinTime = 10;
+        autoSpinOptions.SetActive(false);
+        autoSpinButtonText.text = "x10";
+        autoSpinButtonText.fontSize = 20;
+    }
+    public void AutoSpin_100_Button()
+    {
+        autoSpinTime = 100;
+        autoSpinOptions.SetActive(false);
+        autoSpinButtonText.text = "x100";
+        autoSpinButtonText.fontSize = 18;
+    }
+    public void AutoSpin_1k_Button()
+    {
+        autoSpinTime = 1000;
+        autoSpinOptions.SetActive(false);
+        autoSpinButtonText.text = "x1k";
+        autoSpinButtonText.fontSize = 20;
     }
 
     //Unit Testing----------------------------------------------------------------------------------------
