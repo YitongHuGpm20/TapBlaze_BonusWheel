@@ -8,6 +8,10 @@ public class GameScreenManager : MonoBehaviour
     public GameObject options;
     public GameObject optionsOnButton;
     public GameObject optionsOffButton;
+    public GameObject custom;
+    public GameObject report;
+    public GameObject autoSpinOptions;
+    public GameObject settings;
 
     public void ToggleOptions()
     {
@@ -19,5 +23,25 @@ public class GameScreenManager : MonoBehaviour
     public void RestartButton()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void ToggleCustom()
+    {
+        custom.SetActive(!custom.activeSelf);
+    }
+
+    public void ToggleReport()
+    {
+        report.SetActive(!report.activeSelf);
+    }
+
+    public void ToggleAutoSpinOptions()
+    {
+        autoSpinOptions.SetActive(!autoSpinOptions.activeSelf);
+    }
+
+    public void ToggleSettings()
+    {
+        settings.SetActive(!settings.activeSelf);
     }
 }

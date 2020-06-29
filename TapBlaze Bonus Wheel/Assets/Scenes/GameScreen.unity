@@ -2947,7 +2947,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 179599130}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 307947429}
+        m_MethodName: ToggleAutoSpinOptions
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &179599130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5999,6 +6010,10 @@ MonoBehaviour:
   options: {fileID: 1001863506}
   optionsOnButton: {fileID: 969210346}
   optionsOffButton: {fileID: 1030628054}
+  custom: {fileID: 1283631043}
+  report: {fileID: 1461445366}
+  autoSpinOptions: {fileID: 1060583060}
+  settings: {fileID: 369141770}
 --- !u!4 &307947430
 Transform:
   m_ObjectHideFlags: 0
@@ -11093,7 +11108,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 559478158}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 307947429}
+        m_MethodName: ToggleReport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &559478158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16287,7 +16313,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 784195590}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 307947429}
+        m_MethodName: ToggleCustom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &784195590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29067,7 +29104,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1351099790}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 307947429}
+        m_MethodName: ToggleReport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1351099790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35063,7 +35111,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1626257386}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 307947429}
+        m_MethodName: ToggleSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1626257386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36226,7 +36285,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1686024452}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 307947429}
+        m_MethodName: ToggleCustom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1686024452
 MonoBehaviour:
   m_ObjectHideFlags: 0
