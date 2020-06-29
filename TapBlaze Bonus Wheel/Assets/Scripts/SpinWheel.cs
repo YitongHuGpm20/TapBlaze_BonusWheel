@@ -51,15 +51,15 @@ public class SpinWheel : MonoBehaviour
     public TextMeshProUGUI[] itemAmount;
     public TextMeshProUGUI winText;
     public GameObject win;
-    public GameObject autoSpinOptions;
-    public TextMeshProUGUI autoSpinButtonText;
-    public GameObject flame;
+    public GameObject[] sections;
+    public GameObject[] icons;
     private Sector[] sectors = new Sector[8];
     private Item[] items = new Item[5];
     private bool canSpin;
     private int finalAngle;
     private int pointedSector;
-    private int autoSpinTime;
+    private string[] types = { "Life", "Brush", "Gem", "Hammer", "Coin" };
+    
 
     [Header("Report")]
     public TextMeshProUGUI totalSpinText;
@@ -75,6 +75,12 @@ public class SpinWheel : MonoBehaviour
     public TMP_InputField[] amountInput;
     public TextMeshProUGUI[] amountText;
     public TMP_Dropdown[] prizeType;
+
+    [Header("AutoSpin")]
+    public GameObject autoSpinOptions;
+    public TextMeshProUGUI autoSpinButtonText;
+    public GameObject flame;
+    private int autoSpinTime;
 
     [HideInInspector]
     public GameObject[] wheelGame;
@@ -113,6 +119,7 @@ public class SpinWheel : MonoBehaviour
         }
         UpdateEstimatedDropRates();
         wheelGame = GameObject.FindGameObjectsWithTag("WheelGame");
+        UpdateWheel();
     }
 
     private IEnumerator Spin()
@@ -255,6 +262,30 @@ public class SpinWheel : MonoBehaviour
                 amountText[i].text = "x" + sectors[i].Amount;
             reportText[i].text = sectors[i].Type + " " + amountText[i].text;
         }
+    }//Update amount and prize type on UI text
+
+    private void UpdateWheel()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            Destroy(sections[i].transform.GetChild(0).gameObject);
+            GameObject icon = null;
+            for (int j = 0; j < 5; j++)
+                if (sectors[i].Type == icons[j].name)
+                    icon = Instantiate(icons[j]);
+            icon.transform.parent = sections[i].transform;
+            icon.transform.localRotation = new Quaternion(0, 0, 0, 0);
+            if (sectors[i].Type == "Life")
+            {
+                icon.transform.GetChild(0).GetComponent<TMP_Text>().text = sectors[i].Amount.ToString();
+                icon.transform.localPosition = new Vector3(-0.132f, 0.2f, 0);
+            }
+            else
+            {
+                icon.transform.GetChild(0).GetComponent<TMP_Text>().text = "x" + sectors[i].Amount.ToString();
+                icon.transform.localPosition = new Vector3(0, 0.2f, 0);
+            }  
+        }
     }
 
     private void DisplaySpinResult()
@@ -280,7 +311,6 @@ public class SpinWheel : MonoBehaviour
             else
                 StartCoroutine(AutoSpin());
         }
-            
     }
 
     public void ApplyButton()
@@ -332,6 +362,8 @@ public class SpinWheel : MonoBehaviour
         }
         if (madeChange_PrizeType || madeChange_Amount)
             UpdatePrize();
+        if (madeChange_PrizeType || madeChange_Amount)
+            UpdateWheel();
         if (!madeChange_DropRate && !madeChange_Amount && !madeChange_PrizeType)
             errorText.text = "you didn't make any change";
 
@@ -380,6 +412,7 @@ public class SpinWheel : MonoBehaviour
             sectors[i].Type = ut_prizeType[i];
             sectors[i].Amount = ut_amount[i];
             sectors[i].DropRate = ut_dropRate[i];
+            prizeType[i].value = System.Array.IndexOf(types, sectors[i].Type);
         }
         UpdateEstimatedDropRates();
         UpdatePrize();
