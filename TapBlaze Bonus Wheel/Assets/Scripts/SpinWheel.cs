@@ -53,6 +53,7 @@ public class SpinWheel : MonoBehaviour
     public GameObject win;
     public GameObject[] sections;
     public GameObject[] icons;
+    public Sprite[] itemImages;
     private Sector[] sectors = new Sector[8];
     private Item[] items = new Item[5];
     private bool canSpin;
@@ -290,8 +291,6 @@ public class SpinWheel : MonoBehaviour
 
     private void DisplaySpinResult()
     {
-        //TODO: update icon
-
         if (sectors[pointedSector].Type == "Life")
             winText.text = sectors[pointedSector].Type + " " + sectors[pointedSector].Amount + " min";
         else
@@ -299,6 +298,17 @@ public class SpinWheel : MonoBehaviour
         foreach (GameObject w in wheelGame)
             w.gameObject.SetActive(false);
         win.SetActive(true);
+        if (autoSpinTime == 1)
+        {
+            win.transform.GetChild(1).gameObject.SetActive(true);
+            win.transform.GetChild(2).gameObject.SetActive(false);
+            win.transform.GetChild(1).transform.GetChild(0).GetComponent<Image>().sprite = itemImages[System.Array.IndexOf(types, sectors[pointedSector].Type)];
+        }
+        else
+        {
+            win.transform.GetChild(1).gameObject.SetActive(false);
+            win.transform.GetChild(2).gameObject.SetActive(true);
+        }
     }
 
     //Button Functions------------------------------------------------------------------------------------
