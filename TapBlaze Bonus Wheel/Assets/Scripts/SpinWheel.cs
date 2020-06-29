@@ -193,11 +193,6 @@ public class SpinWheel : MonoBehaviour
             winText.text = sectors[pointedSector].Type + " " + sectors[pointedSector].Amount + " min";
         else
             winText.text = sectors[pointedSector].Type + " x" + sectors[pointedSector].Amount;
-        if (wheelGame != null)
-        {
-            
-            Debug.Log("hi");
-        }  
         foreach (GameObject w in wheelGame)
             w.gameObject.SetActive(false);
         win.SetActive(true);

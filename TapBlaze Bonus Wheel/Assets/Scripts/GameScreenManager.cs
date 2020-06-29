@@ -65,4 +65,14 @@ public class GameScreenManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void ToggleBGM()
+    {
+        GameManager.bgmOn = !GameManager.bgmOn;
+    }
+
+    public void ToggleSFX()
+    {
+        GameManager.sfxOn = !GameManager.sfxOn;
+    }
 }
