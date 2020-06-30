@@ -411,7 +411,7 @@ public class SpinWheel : MonoBehaviour
         autoSpinTime = 1;
         autoSpinOptions.SetActive(false);
         autoSpinButtonText.text = "x1";
-        autoSpinButtonText.fontSize = 24;
+        autoSpinButtonText.fontSize = 30;
     }
 
     public void AutoSpin_10_Button()
