@@ -54,6 +54,7 @@ public class SpinWheel : MonoBehaviour
     public GameObject[] sections;
     public GameObject[] icons;
     public Sprite[] itemImages;
+    public GameObject glory;
     private Sector[] sectors = new Sector[8];
     private Item[] items = new Item[5];
     private bool canSpin;
@@ -61,6 +62,7 @@ public class SpinWheel : MonoBehaviour
     private int pointedSector;
     private string[] types = { "Life", "Brush", "Gem", "Hammer", "Coin" };
     private Vector2[] winIconSize = { new Vector2(165.6f, 150), new Vector2(127.7f, 150), new Vector2(120, 150), new Vector2(166.7f, 150), new Vector2(150, 150) };
+    private float rotationTime;
     
 
     [Header("Report")]
@@ -126,10 +128,15 @@ public class SpinWheel : MonoBehaviour
         UpdateWheel();
     }
 
+    private void Update()
+    {
+
+    }
+
     private IEnumerator Spin()
     {
         canSpin = false;
-        float timeInterval = 0.05f;
+        float timeInterval = 0.025f;
         totalSpin++;
         int spinResult = Random.Range(0, 100);
         int rotateTimes = 0;
@@ -137,26 +144,25 @@ public class SpinWheel : MonoBehaviour
         {
             if (spinResult >= sectors[i].DropRateMin && spinResult <= sectors[i].DropRateMax)
             {
-                rotateTimes = (i + 24 - pointedSector) * 2;
-                //Debug.Log((i+1).ToString() + " " + spinResult + " " + rotateTimes / 2);
+                rotateTimes = (i + 24 - pointedSector) * 4;
+                //Debug.Log((i+1).ToString() + " " + spinResult + " " + rotateTimes / 4);
             } 
         }
 
         //Spin the wheel and control spinning speed
         for (int i = 0; i < rotateTimes; i++)
         {
-            transform.Rotate(0, 0, 22.5f);
+            transform.Rotate(0, 0, 11.25f);
             if (i > Mathf.RoundToInt(rotateTimes * .5f))
-                timeInterval = .1f;
+                timeInterval = .05f;
             if (i > Mathf.RoundToInt(rotateTimes * .85f))
-                timeInterval = .2f;
+                timeInterval = .1f;
             yield return new WaitForSeconds(timeInterval);
         }
 
         //When wheel stops
-        if (Mathf.RoundToInt(transform.eulerAngles.z) % 45 != 0)
-            transform.Rotate(0, 0, 22.5f);
-        
+        transform.Rotate(0, 0, Mathf.RoundToInt(transform.eulerAngles.z) % 45 * 11.25f);
+
         //Find the index of current pointed sector
         finalAngle = Mathf.RoundToInt(transform.eulerAngles.z);
         pointedSector = finalAngle / 45;
@@ -174,8 +180,9 @@ public class SpinWheel : MonoBehaviour
         sectors[pointedSector].SpinTimes++;
         sectorSpinText[pointedSector].text = sectors[pointedSector].SpinTimes.ToString();
         UpdateActualDropRates();
-        DisplaySpinResult();
+        StartCoroutine(DisplaySpinResult());
         canSpin = true;
+        glory.SetActive(true);
     }
 
     private IEnumerator AutoSpin()
@@ -217,8 +224,9 @@ public class SpinWheel : MonoBehaviour
             itemAmount[i].text = items[i].Amount.ToString();
         totalSpinText.text = "Total Spin: " + totalSpin + " times";
         UpdateActualDropRates();
-        DisplaySpinResult();
+        StartCoroutine(DisplaySpinResult());
         canSpin = true;
+        glory.SetActive(true);
     }
 
     private void UpdateEstimatedDropRates()
@@ -295,8 +303,10 @@ public class SpinWheel : MonoBehaviour
         }
     }
 
-    private void DisplaySpinResult()
+    private IEnumerator DisplaySpinResult()
     {
+        yield return new WaitForSeconds(.75f);
+        glory.SetActive(false);
         if (sectors[pointedSector].Type == "Life")
             winText.text = sectors[pointedSector].Type + " " + sectors[pointedSector].Amount + " min";
         else
@@ -308,8 +318,9 @@ public class SpinWheel : MonoBehaviour
         {
             win.transform.GetChild(1).gameObject.SetActive(true);
             win.transform.GetChild(2).gameObject.SetActive(false);
-            win.transform.GetChild(1).transform.GetChild(0).GetComponent<Image>().sprite = itemImages[System.Array.IndexOf(types, sectors[pointedSector].Type)];
-            win.transform.GetChild(1).transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = winIconSize[System.Array.IndexOf(types, sectors[pointedSector].Type)];
+            win.transform.GetChild(1).transform.GetChild(1).GetComponent<Image>().sprite = itemImages[System.Array.IndexOf(types, sectors[pointedSector].Type)];
+            win.transform.GetChild(1).transform.GetChild(1).GetComponent<RectTransform>().sizeDelta = winIconSize[System.Array.IndexOf(types, sectors[pointedSector].Type)];
+            win.transform.GetChild(1).transform.GetChild(1).gameObject.SetActive(true);
         }
         else
         {

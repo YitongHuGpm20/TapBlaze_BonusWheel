@@ -13,6 +13,7 @@ public class GameScreenManager : MonoBehaviour
     public GameObject autoSpinOptions;
     public GameObject settings;
     public GameObject win;
+    public GameObject prizeIcon;
 
     [HideInInspector]
     public GameObject[] wheelGame;
@@ -59,6 +60,7 @@ public class GameScreenManager : MonoBehaviour
         foreach (GameObject w in wheelGame)
             w.gameObject.SetActive(true);
         win.SetActive(false);
+        prizeIcon.SetActive(false);
     }
 
     public void HomeButton()
