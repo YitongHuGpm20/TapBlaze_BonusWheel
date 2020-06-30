@@ -85,6 +85,7 @@ public class SpinWheel : MonoBehaviour
     public TextMeshProUGUI autoSpinButtonText;
     public GameObject flame;
     public TextMeshProUGUI[] autoSpinPrizeText;
+    public GameObject[] prizeIcons;
     private int autoSpinTime;
     private int[] increasedAmount = new int[5];
 
