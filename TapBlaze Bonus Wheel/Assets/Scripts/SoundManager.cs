@@ -23,6 +23,13 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        GetComponent<AudioSource>().mute = !GameManager.bgmOn;
+        for (int i = 0; i < audioList.Length; i++)
+            sources[i].mute = !GameManager.sfxOn;
+    }
+
     public void PlaySound(int index)
     {
         sources[index].Play();

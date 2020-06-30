@@ -2770,6 +2770,13 @@ MonoBehaviour:
   settings: {fileID: 1528565433}
   info: {fileID: 1104420571}
   socialMedia: {fileID: 1608403980}
+  soundIcons:
+  - {fileID: 21300000, guid: d42d1a6ade3d7de40af1c3788ac6afd3, type: 3}
+  - {fileID: 21300000, guid: 7bc08a5658475ff4db03d5830b6505be, type: 3}
+  - {fileID: 21300000, guid: 3a1382374742ec743bab0425f761370e, type: 3}
+  - {fileID: 21300000, guid: a3f8f88798a58c842b449e922b6078e5, type: 3}
+  bgmButton: {fileID: 262977713}
+  sfxButton: {fileID: 1891773482}
 --- !u!4 &1791900609
 Transform:
   m_ObjectHideFlags: 0
@@ -3074,7 +3081,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a3f8f88798a58c842b449e922b6078e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3a1382374742ec743bab0425f761370e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameScreenManager : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class GameScreenManager : MonoBehaviour
     public GameObject settings;
     public GameObject win;
     public GameObject prizeIcon;
+    public Sprite[] soundIcons;
+    public Image bgmButton;
+    public Image sfxButton;
 
     [HideInInspector]
     public GameObject[] wheelGame;
@@ -81,11 +85,19 @@ public class GameScreenManager : MonoBehaviour
     {
         GameManager.bgmOn = !GameManager.bgmOn;
         SoundManager.instance.PlaySound(0);
+        if (GameManager.bgmOn)
+            bgmButton.sprite = soundIcons[0];
+        else
+            bgmButton.sprite = soundIcons[1];
     }
 
     public void ToggleSFX()
     {
         GameManager.sfxOn = !GameManager.sfxOn;
         SoundManager.instance.PlaySound(0);
+        if (GameManager.sfxOn)
+            sfxButton.sprite = soundIcons[2];
+        else
+            sfxButton.sprite = soundIcons[3];
     }
 }
