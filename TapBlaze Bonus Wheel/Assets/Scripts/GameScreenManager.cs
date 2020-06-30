@@ -25,6 +25,14 @@ public class GameScreenManager : MonoBehaviour
     private void Start()
     {
         wheelGame = GameObject.FindGameObjectsWithTag("WheelGame");
+        if (GameManager.bgmOn)
+            bgmButton.sprite = soundIcons[0];
+        else
+            bgmButton.sprite = soundIcons[1];
+        if (GameManager.sfxOn)
+            sfxButton.sprite = soundIcons[2];
+        else
+            sfxButton.sprite = soundIcons[3];
     }
 
     public void ToggleOptions()

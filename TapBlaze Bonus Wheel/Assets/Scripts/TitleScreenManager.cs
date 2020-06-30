@@ -13,6 +13,18 @@ public class TitleScreenManager : MonoBehaviour
     public Image bgmButton;
     public Image sfxButton;
 
+    private void Start()
+    {
+        if (GameManager.bgmOn)
+            bgmButton.sprite = soundIcons[0];
+        else
+            bgmButton.sprite = soundIcons[1];
+        if (GameManager.sfxOn)
+            sfxButton.sprite = soundIcons[2];
+        else
+            sfxButton.sprite = soundIcons[3];
+    }
+
     public void PlayButton()
     {
         SceneManager.LoadScene(1);
