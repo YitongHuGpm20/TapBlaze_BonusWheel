@@ -27,4 +27,9 @@ public class SoundManager : MonoBehaviour
     {
         sources[index].Play();
     }
+
+    public void StopSound(int index)
+    {
+        sources[index].Stop();
+    }
 }

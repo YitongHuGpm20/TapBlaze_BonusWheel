@@ -68,6 +68,7 @@ public class GameScreenManager : MonoBehaviour
         win.SetActive(false);
         prizeIcon.SetActive(false);
         SoundManager.instance.PlaySound(0);
+        SoundManager.instance.StopSound(2);
     }
 
     public void HomeButton()

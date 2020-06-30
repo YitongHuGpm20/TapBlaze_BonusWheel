@@ -137,6 +137,7 @@ public class SpinWheel : MonoBehaviour
     {
         canSpin = false;
         float timeInterval = 0.025f;
+        SoundManager.instance.PlaySound(1);
         totalSpin++;
         int spinResult = Random.Range(0, 100);
         int rotateTimes = 0;
@@ -183,11 +184,14 @@ public class SpinWheel : MonoBehaviour
         StartCoroutine(DisplaySpinResult());
         canSpin = true;
         glory.SetActive(true);
+        SoundManager.instance.StopSound(1);
+        SoundManager.instance.PlaySound(2);
     }
 
     private IEnumerator AutoSpin()
     {
         canSpin = false;
+        SoundManager.instance.PlaySound(3);
         System.Array.Clear(increasedAmount, 0, 5);
         for (int a = 0; a < autoSpinTime; a++)
         {
@@ -227,6 +231,8 @@ public class SpinWheel : MonoBehaviour
         StartCoroutine(DisplaySpinResult());
         canSpin = true;
         glory.SetActive(true);
+        SoundManager.instance.StopSound(3);
+        SoundManager.instance.PlaySound(2);
     }
 
     private void UpdateEstimatedDropRates()
