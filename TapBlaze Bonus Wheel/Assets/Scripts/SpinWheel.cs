@@ -49,7 +49,7 @@ public class SpinWheel : MonoBehaviour
 
     [Header("Main Game")]
     public TextMeshProUGUI[] itemAmount;
-    public TextMeshProUGUI winText;
+    public Text winText;
     public GameObject win;
     public GameObject[] sections;
     public GameObject[] icons;
@@ -84,8 +84,7 @@ public class SpinWheel : MonoBehaviour
     public GameObject autoSpinOptions;
     public TextMeshProUGUI autoSpinButtonText;
     public GameObject flame;
-    public TextMeshProUGUI[] autoSpinPrizeText;
-    public GameObject[] prizeIcons;
+    public Text[] autoSpinPrizeText;
     private int autoSpinTime;
     private int[] increasedAmount = new int[5];
 
@@ -308,15 +307,15 @@ public class SpinWheel : MonoBehaviour
     {
         yield return new WaitForSeconds(.75f);
         glory.SetActive(false);
-        if (sectors[pointedSector].Type == "Life")
-            winText.text = sectors[pointedSector].Type + " " + sectors[pointedSector].Amount + " min";
-        else
-            winText.text = sectors[pointedSector].Type + " x" + sectors[pointedSector].Amount;
         foreach (GameObject w in wheelGame)
             w.gameObject.SetActive(false);
         win.SetActive(true);
         if (autoSpinTime == 1)
         {
+            if (sectors[pointedSector].Type == "Life")
+                winText.text = sectors[pointedSector].Type + " " + sectors[pointedSector].Amount + " min";
+            else
+                winText.text = sectors[pointedSector].Type + " x" + sectors[pointedSector].Amount;
             win.transform.GetChild(1).gameObject.SetActive(true);
             win.transform.GetChild(2).gameObject.SetActive(false);
             win.transform.GetChild(1).transform.GetChild(1).GetComponent<Image>().sprite = itemImages[System.Array.IndexOf(types, sectors[pointedSector].Type)];
