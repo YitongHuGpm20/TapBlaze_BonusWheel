@@ -342,6 +342,7 @@ public class SpinWheel : MonoBehaviour
             else
                 StartCoroutine(AutoSpin());
         }
+        SoundManager.instance.PlaySound(0);
     }
 
     public void ApplyButton()
@@ -403,6 +404,7 @@ public class SpinWheel : MonoBehaviour
             dropRateInput[i].text = "";
             amountInput[i].text = "";
         }
+        SoundManager.instance.PlaySound(0);
     }
 
     public void AutoSpin_1_Button()
@@ -411,6 +413,7 @@ public class SpinWheel : MonoBehaviour
         autoSpinOptions.SetActive(false);
         autoSpinButtonText.text = "x1";
         autoSpinButtonText.fontSize = 30;
+        SoundManager.instance.PlaySound(0);
     }
 
     public void AutoSpin_10_Button()
@@ -419,6 +422,7 @@ public class SpinWheel : MonoBehaviour
         autoSpinOptions.SetActive(false);
         autoSpinButtonText.text = "x10";
         autoSpinButtonText.fontSize = 20;
+        SoundManager.instance.PlaySound(0);
     }
     public void AutoSpin_100_Button()
     {
@@ -426,6 +430,7 @@ public class SpinWheel : MonoBehaviour
         autoSpinOptions.SetActive(false);
         autoSpinButtonText.text = "x100";
         autoSpinButtonText.fontSize = 18;
+        SoundManager.instance.PlaySound(0);
     }
     public void AutoSpin_1k_Button()
     {
@@ -433,6 +438,7 @@ public class SpinWheel : MonoBehaviour
         autoSpinOptions.SetActive(false);
         autoSpinButtonText.text = "x1k";
         autoSpinButtonText.fontSize = 20;
+        SoundManager.instance.PlaySound(0);
     }
 
     //Unit Testing----------------------------------------------------------------------------------------

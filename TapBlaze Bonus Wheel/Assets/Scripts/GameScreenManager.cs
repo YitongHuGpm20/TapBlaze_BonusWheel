@@ -28,31 +28,37 @@ public class GameScreenManager : MonoBehaviour
         options.SetActive(!options.activeSelf);
         optionsOffButton.SetActive(!optionsOffButton.activeSelf);
         optionsOnButton.SetActive(!optionsOnButton.activeSelf);
+        SoundManager.instance.PlaySound(0);
     }
 
     public void RestartButton()
     {
         SceneManager.LoadScene(1);
+        SoundManager.instance.PlaySound(0);
     }
 
     public void ToggleCustom()
     {
         custom.SetActive(!custom.activeSelf);
+        SoundManager.instance.PlaySound(0);
     }
 
     public void ToggleReport()
     {
         report.SetActive(!report.activeSelf);
+        SoundManager.instance.PlaySound(0);
     }
 
     public void ToggleAutoSpinOptions()
     {
         autoSpinOptions.SetActive(!autoSpinOptions.activeSelf);
+        SoundManager.instance.PlaySound(0);
     }
 
     public void ToggleSettings()
     {
         settings.SetActive(!settings.activeSelf);
+        SoundManager.instance.PlaySound(0);
     }
 
     public void ClaimButton()
@@ -61,20 +67,24 @@ public class GameScreenManager : MonoBehaviour
             w.gameObject.SetActive(true);
         win.SetActive(false);
         prizeIcon.SetActive(false);
+        SoundManager.instance.PlaySound(0);
     }
 
     public void HomeButton()
     {
         SceneManager.LoadScene(0);
+        SoundManager.instance.PlaySound(0);
     }
 
     public void ToggleBGM()
     {
         GameManager.bgmOn = !GameManager.bgmOn;
+        SoundManager.instance.PlaySound(0);
     }
 
     public void ToggleSFX()
     {
         GameManager.sfxOn = !GameManager.sfxOn;
+        SoundManager.instance.PlaySound(0);
     }
 }
