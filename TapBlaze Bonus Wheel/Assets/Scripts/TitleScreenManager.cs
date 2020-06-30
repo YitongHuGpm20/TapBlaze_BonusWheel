@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using VoxelBusters;
+using VoxelBusters.NativePlugins;
 
 public class TitleScreenManager : MonoBehaviour
 {
@@ -65,5 +67,11 @@ public class TitleScreenManager : MonoBehaviour
             sfxButton.sprite = soundIcons[2];
         else
             sfxButton.sprite = soundIcons[3];
+    }
+
+    private void ShareSheet()
+    {
+        //ShareSheet shareSheet = new ShareSheet();
+        //shareSheet.Text = ""
     }
 }
